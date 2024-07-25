@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
@@ -16,7 +17,8 @@ class AuthController extends Controller
         return User::create([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
-            'password' => Hash::make($request->input('password'))
+            'password' => Hash::make($request->input('password')),
+            'is_admin' => $request->input('is_admin', 0)
         ]);
     }
 
@@ -52,4 +54,14 @@ class AuthController extends Controller
             'message' => 'Success'
         ])->withCookie($cookie);
     }
+
+    public function admin()
+    {
+        if (Gate::allows('access-admin')) {
+            return response()->json(['message' => 'Admin dashboard data']);
+        }
+
+        return response()->json(['message' => 'Unauthorized'], 403);
+    }
 }
+?>
