@@ -24,6 +24,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('logout', [\App\Http\Controllers\AuthController::class, 'logout']);
 });
 
+Route::get("/search",[UserController::class, "getAllUsers"]);
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/admin', [AuthController::class, 'admin'])->can('access-admin');
     Route::get('users', [UserController::class, 'getAllUsers'])->can('access-admin');
