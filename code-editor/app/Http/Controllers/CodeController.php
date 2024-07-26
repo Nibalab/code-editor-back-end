@@ -6,28 +6,36 @@ use Illuminate\Http\Request;
 
 class CodeController extends Controller
 {
-    public function createCode(Request $request)
+    // Create a new source code entry
+    public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'user_id' => 'required|exists:users,id',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'code' => 'required|string',
             'language' => 'required|string|max:255',
         ]);
 
+        $validatedData['user_id'] = $request->user()->id;
+
         $code = Code::create($validatedData);
 
         return response()->json($code, 201);
     }
 
-    public function getAllCodes()
+    // Read (retrieve) all source code entries for a specific user
+    public function index(Request $request)
     {
-        $codes = Code::all();
+        $validatedData = $request->validate([
+            'user_id' => 'required|exists:users,id',
+        ]);
+
+        $codes = Code::where('user_id', $validatedData['user_id'])->get();
         return response()->json($codes);
     }
 
-    public function getCode($id)
+    // Read (retrieve) a single source code entry by ID
+    public function show($id)
     {
         $code = Code::find($id);
 
@@ -38,12 +46,17 @@ class CodeController extends Controller
         return response()->json($code);
     }
 
-    public function updateCode(Request $request, $id)
+    // Update an existing source code entry by ID
+    public function update(Request $request, $id)
     {
         $code = Code::find($id);
 
         if (!$code) {
             return response()->json(['message' => 'Source code not found'], 404);
+        }
+
+        if ($request->user()->id !== $code->user_id) {
+            return response()->json(['message' => 'Unauthorized'], 403);
         }
 
         $validatedData = $request->validate([
@@ -58,12 +71,17 @@ class CodeController extends Controller
         return response()->json($code);
     }
 
-    public function deleteCode($id)
+    // Delete a source code entry by ID
+    public function destroy(Request $request, $id)
     {
         $code = Code::find($id);
 
         if (!$code) {
             return response()->json(['message' => 'Source code not found'], 404);
+        }
+
+        if ($request->user()->id !== $code->user_id) {
+            return response()->json(['message' => 'Unauthorized'], 403);
         }
 
         $code->delete();

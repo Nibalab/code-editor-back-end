@@ -34,8 +34,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('users/{id}', [UserController::class, 'deleteUser'])->can('access-admin');
 });
 
-Route::post('/codes', [CodeController::class, 'createCode']);
-Route::get('/codes', [CodeController::class, 'getAllCodes']);
-Route::get('/codes/{id}', [CodeController::class, 'getCode']);
-Route::put('/codes/{id}', [CodeController::class, 'updateCode']);
-Route::delete('/codes/{id}', [CodeController::class, 'deleteCode']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/codes', [CodeController::class, 'store']);
+    Route::get('/codes', [CodeController::class, 'index']);
+    Route::get('/codes/{id}', [CodeController::class, 'show']);
+    Route::put('/codes/{id}', [CodeController::class, 'update']);
+    Route::delete('/codes/{id}', [CodeController::class, 'destroy']);
+});
