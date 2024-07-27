@@ -120,4 +120,20 @@ class UserController extends Controller
             "message" => "User deleted successfully"
         ], 204);
     }
+
+    /**
+     * Search for users by name.
+     */
+    public function searchUsers(Request $request)
+    {
+        $query = $request->input('query');
+        if (!$query) {
+            return response()->json(['message' => 'Query parameter is required'], 400);
+        }
+
+        $users = User::where('name', 'LIKE', "%{$query}%")->get();
+
+        return response()->json($users);
+    }
 }
+?>
