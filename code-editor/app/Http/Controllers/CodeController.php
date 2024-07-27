@@ -34,6 +34,15 @@ class CodeController extends Controller
         return response()->json($codes);
     }
 
+    public function loggedIn(Request $request)
+{
+    $userId = $request->user()->id; 
+    $codes = Code::where('user_id', $userId)->get(); 
+
+    return response()->json($codes);
+}
+
+
     // Read (retrieve) a single source code entry by ID
     public function show($id)
     {

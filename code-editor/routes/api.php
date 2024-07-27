@@ -37,6 +37,7 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/codes', [CodeController::class, 'store']);
     Route::get('/codes', [CodeController::class, 'index']);
+    Route::get('/user-codes', [CodeController::class, 'loggedIn']);
     Route::get('/codes/{id}', [CodeController::class, 'show']);
     Route::put('/codes/{id}', [CodeController::class, 'update']);
     Route::delete('/codes/{id}', [CodeController::class, 'destroy']);
