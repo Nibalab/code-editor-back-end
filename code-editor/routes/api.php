@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CodeController;
+use App\Http\Controllers\OpenAIController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,3 +43,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/codes/{id}', [CodeController::class, 'update']);
     Route::delete('/codes/{id}', [CodeController::class, 'destroy']);
 });
+
+Route::post('/get-suggestions', [OpenAIController::class, 'getSuggestions']);
