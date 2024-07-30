@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ChatController;
-
+use App\Http\Controllers\ProfileController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -38,4 +38,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('users', [UserController::class, 'createUser'])->can('access-admin');
     Route::put('users/{id}', [UserController::class, 'updateUser'])->can('access-admin');
     Route::delete('users/{id}', [UserController::class, 'deleteUser'])->can('access-admin');
+});
+
+
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'show']);
+    Route::post('/profile', [ProfileController::class, 'update']);
 });
