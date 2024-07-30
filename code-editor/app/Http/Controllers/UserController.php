@@ -46,14 +46,14 @@ class UserController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6',
-            'is_admin' => 'nullable|boolean',  // Validate is_admin
+            'is_admin' => 'nullable|boolean',
         ]);
 
         $user = new User;
         $user->name = $req->name;
         $user->email = $req->email;
         $user->password = Hash::make($req->password);
-        $user->is_admin = $req->input('is_admin', false);  // Default to false if not provided
+        $user->is_admin = $req->input('is_admin', false);
         $user->save();
 
         return response()->json([
