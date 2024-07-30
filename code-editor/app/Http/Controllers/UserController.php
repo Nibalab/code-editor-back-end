@@ -46,14 +46,14 @@ class UserController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6',
-            'is_admin' => 'nullable|boolean',
+            'is_admin' => 'nullable|boolean',  // Validate is_admin
         ]);
 
         $user = new User;
         $user->name = $req->name;
         $user->email = $req->email;
         $user->password = Hash::make($req->password);
-        $user->is_admin = $req->input('is_admin', false);
+        $user->is_admin = $req->input('is_admin', false);  // Default to false if not provided
         $user->save();
 
         return response()->json([
@@ -120,4 +120,20 @@ class UserController extends Controller
             "message" => "User deleted successfully"
         ], 204);
     }
+
+    /**
+     * Search for users by name.
+     */
+    public function searchUsers(Request $request)
+    {
+        $query = $request->input('query');
+        if (!$query) {
+            return response()->json(['message' => 'Query parameter is required'], 400);
+        }
+
+        $users = User::where('name', 'LIKE', "%{$query}%")->get();
+
+        return response()->json($users);
+    }
 }
+?>

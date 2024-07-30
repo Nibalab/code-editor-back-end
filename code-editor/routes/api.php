@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\CodeController;
 use App\Http\Controllers\OpenAIController;
 
@@ -42,6 +43,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/codes/{id}', [CodeController::class, 'show']);
     Route::put('/codes/{id}', [CodeController::class, 'update']);
     Route::delete('/codes/{id}', [CodeController::class, 'destroy']);
+
+    Route::get('/user/search', [UserController::class, 'searchUsers']); // Ensure this route points to the correct method
+
+    Route::get('/chat/history', [ChatController::class, 'getChatHistory']);
+    Route::post('/chat/send', [ChatController::class, 'sendMessage']);
 });
 
 Route::post('/get-suggestions', [OpenAIController::class, 'getSuggestions']);
