@@ -53,6 +53,7 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/profile', [ProfileController::class, 'show']);
     Route::post('/profile', [ProfileController::class, 'update']);
+    Route::get('/profile/current', [ProfileController::class, 'getProfile']);
 });
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/codes', [CodeController::class, 'store']);
@@ -62,7 +63,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/codes/{id}', [CodeController::class, 'update']);
     Route::delete('/codes/{id}', [CodeController::class, 'destroy']);
 
-    Route::get('/user/search', [UserController::class, 'searchUsers']); // Ensure this route points to the correct method
+    Route::get('/user/search', [UserController::class, 'searchUsers']);
 
     Route::get('/chat/history', [ChatController::class, 'getChatHistory']);
     Route::post('/chat/send', [ChatController::class, 'sendMessage']);
