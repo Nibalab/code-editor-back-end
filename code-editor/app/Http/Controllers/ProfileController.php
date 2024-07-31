@@ -4,24 +4,32 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 use App\Models\Profile;
-use App\Models\Asset; // Assuming you have an Asset model to handle asset files
+use App\Models\Code;
 
 class ProfileController extends Controller
 {
-    public function show()
+    public function show(Request $request)
     {
-        $user = Auth::user();
-        $userId = $user->id;
+        $query = $request->input('query');
+        $type = $request->input('type');
 
-        $profile = Profile::firstOrCreate(
-            ['user_id' => $userId],
-            ['bio' => '', 'readme_content' => '']
-        );
+        $user = User::where($type, $query)->first();
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        $profile = Profile::where('user_id', $user->id)->first();
+        $codesCount = Code::where('user_id', $user->id)->count();
 
         return response()->json([
-            'user_id' => $userId,
-            'profile' => $profile
+            'user_id' => $user->id,
+            'name' => $user->name, 
+            'email' => $user->email,
+            'bio' => $profile->bio,
+            'codesCount' => $codesCount
         ]);
     }
 
@@ -69,4 +77,29 @@ class ProfileController extends Controller
 
         return response()->json(['readme_content' => ''], 404);
     }
+    public function getProfile()
+{
+    $user = Auth::user();
+
+    if (!$user) {
+        return response()->json(['message' => 'Unauthorized'], 401);
+    }
+
+    $profile = Profile::where('user_id', $user->id)->first();
+
+    if (!$profile) {
+        return response()->json(['message' => 'Profile not found'], 404);
+    }
+
+    $codesCount = Code::where('user_id', $user->id)->count();
+
+    return response()->json([
+        'user_id' => $user->id,
+        'name' => $user->name,
+        'email' => $user->email,
+        'bio' => $profile->bio,
+        'codesCount' => $codesCount,
+        'readme_content' => $profile->readme_content,
+    ]);
+}
 }
