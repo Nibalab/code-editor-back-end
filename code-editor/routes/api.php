@@ -54,6 +54,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/profile', [ProfileController::class, 'show']);
     Route::post('/profile', [ProfileController::class, 'update']);
     Route::get('/profile/current', [ProfileController::class, 'getProfile']);
+    Route::get('/profile/{user_id}/readme', [ProfileController::class, 'getReadmeById']);
 });
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/codes', [CodeController::class, 'store']);
