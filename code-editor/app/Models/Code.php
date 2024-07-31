@@ -9,9 +9,7 @@ class Code extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'user_id', 'code', 'file_name'
-    ];
+    protected $fillable = ['user_id', 'title', 'description', 'code', 'language'];
 
     public function user()
     {

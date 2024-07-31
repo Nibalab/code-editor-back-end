@@ -6,6 +6,9 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CodeController;
+use App\Http\Controllers\OpenAIController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -46,3 +49,18 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/profile', [ProfileController::class, 'show']);
     Route::post('/profile', [ProfileController::class, 'update']);
 });
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/codes', [CodeController::class, 'store']);
+    Route::get('/codes', [CodeController::class, 'index']);
+    Route::get('/user-codes', [CodeController::class, 'loggedIn']);
+    Route::get('/codes/{id}', [CodeController::class, 'show']);
+    Route::put('/codes/{id}', [CodeController::class, 'update']);
+    Route::delete('/codes/{id}', [CodeController::class, 'destroy']);
+
+    Route::get('/user/search', [UserController::class, 'searchUsers']); // Ensure this route points to the correct method
+
+    Route::get('/chat/history', [ChatController::class, 'getChatHistory']);
+    Route::post('/chat/send', [ChatController::class, 'sendMessage']);
+});
+
+Route::post('/get-suggestions', [OpenAIController::class, 'getSuggestions']);
