@@ -33,7 +33,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/chat/history', [ChatController::class, 'getChatHistory']);
     Route::post('/chat/send', [ChatController::class, 'sendMessage']);
     
-    // Admin routes
+    
     Route::get('/admin', [AuthController::class, 'admin'])->can('access-admin');
     Route::get('users', [UserController::class, 'getAllUsers'])->can('access-admin');
     Route::get('users/{id}', [UserController::class, 'getUser'])->can('access-admin');
