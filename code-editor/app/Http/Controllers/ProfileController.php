@@ -102,4 +102,14 @@ class ProfileController extends Controller
         'readme_content' => $profile->readme_content,
     ]);
 }
+public function getReadmeById($user_id)
+{
+    $profile = Profile::where('user_id', $user_id)->first();
+
+    if ($profile && $profile->readme_content) {
+        return response()->json(['readme_content' => $profile->readme_content]);
+    }
+
+    return response()->json(['readme_content' => ''], 404);
+}
 }
