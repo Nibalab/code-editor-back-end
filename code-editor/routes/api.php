@@ -8,6 +8,8 @@ use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CodeController;
 use App\Http\Controllers\OpenAIController;
+use App\Http\Controllers\AssetController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -29,12 +31,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('user', [AuthController::class, 'user']);
     Route::post('logout', [AuthController::class, 'logout']);
     Route::get('/user/search', [UserController::class, 'searchUsers']); // Ensure this route points to the correct method
-
+});
     // Chat routes
     Route::get('/chat/history', [ChatController::class, 'getChatHistory']);
     Route::post('/chat/send', [ChatController::class, 'sendMessage']);
     
     // Admin routes
+Route::get("/search",[UserController::class, "getUserBy"]);
+
+Route::middleware('auth:sanctum')->group(function () {
     Route::get('/admin', [AuthController::class, 'admin'])->can('access-admin');
     Route::get('users', [UserController::class, 'getAllUsers'])->can('access-admin');
     Route::get('users/{id}', [UserController::class, 'getUser'])->can('access-admin');
@@ -61,6 +66,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/chat/history', [ChatController::class, 'getChatHistory']);
     Route::post('/chat/send', [ChatController::class, 'sendMessage']);
+    Route::post('/profile/{profileId}/upload-readme', [ProfileController::class, 'uploadReadme']);
+    Route::get('/profile/readme', [ProfileController::class, 'getReadme']);
+
 });
 
 Route::post('/get-suggestions', [OpenAIController::class, 'getSuggestions']);
