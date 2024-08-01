@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 class CodeController extends Controller
 {
-    // Create a new source code entry
+    
     public function store(Request $request)
     {
         $validatedData = $request->validate([
@@ -23,7 +23,7 @@ class CodeController extends Controller
         return response()->json($code, 201);
     }
 
-    // Read (retrieve) all source code entries for a specific user
+   
     public function index(Request $request)
     {
         $validatedData = $request->validate([
@@ -43,7 +43,7 @@ class CodeController extends Controller
 }
 
 
-    // Read (retrieve) a single source code entry by ID
+    
     public function show($id)
     {
         $code = Code::find($id);
@@ -55,7 +55,7 @@ class CodeController extends Controller
         return response()->json($code);
     }
 
-    // Update an existing source code entry by ID
+    
     public function update(Request $request, $id)
     {
         $code = Code::find($id);
@@ -80,7 +80,7 @@ class CodeController extends Controller
         return response()->json($code);
     }
 
-    // Delete a source code entry by ID
+    
     public function destroy(Request $request, $id)
     {
         $code = Code::find($id);
