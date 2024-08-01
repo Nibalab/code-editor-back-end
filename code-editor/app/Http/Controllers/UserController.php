@@ -11,6 +11,39 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+     public function getUserBy(Request $request)
+    {
+        
+        $request->validate([
+            'query' => 'required|string',
+            'type' => 'required|string|in:email,username',
+        ]);
+
+        
+        $query = $request->input('query');
+        $type = $request->input('type');
+
+
+        if ($type === 'email') {
+            $user = User::where('email', $query)->first();
+        } else {
+            $user = User::where('username', $query)->first();
+        }
+
+    
+        if ($user) {
+            return response()->json([
+                "user" => $user
+            ], 200);
+        } else {
+            return response()->json([
+                "message" => "User not found"
+            ], 404);
+        }
+    }
+    
+
     public function getAllUsers()
     {
         $users = User::all();

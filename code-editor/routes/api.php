@@ -7,7 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CodeController;
 use App\Http\Controllers\OpenAIController;
 use App\Http\Controllers\ChatController;
-
+use App\Http\Controllers\ProfileController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -33,13 +33,25 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/chat/history', [ChatController::class, 'getChatHistory']);
     Route::post('/chat/send', [ChatController::class, 'sendMessage']);
     
+     // Admin routes
+    Route::get("/search",[UserController::class, "getUserBy"]);
+
     
+
     Route::get('/admin', [AuthController::class, 'admin'])->can('access-admin');
     Route::get('users', [UserController::class, 'getAllUsers'])->can('access-admin');
     Route::get('users/{id}', [UserController::class, 'getUser'])->can('access-admin');
     Route::post('users', [UserController::class, 'createUser'])->can('access-admin');
     Route::put('users/{id}', [UserController::class, 'updateUser'])->can('access-admin');
     Route::delete('users/{id}', [UserController::class, 'deleteUser'])->can('access-admin');
+});
+   
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'show']);
+    Route::post('/profile', [ProfileController::class, 'update']);
+    Route::get('/profile/current', [ProfileController::class, 'getProfile']);
+    Route::post('/profile/{profileId}/upload-readme', [ProfileController::class, 'uploadReadme']);
+    Route::get('/profile/readme', [ProfileController::class, 'getReadme']);
 });
 
 Route::middleware('auth:sanctum')->group(function () {
