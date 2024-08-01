@@ -52,6 +52,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/profile/current', [ProfileController::class, 'getProfile']);
     Route::post('/profile/{profileId}/upload-readme', [ProfileController::class, 'uploadReadme']);
     Route::get('/profile/readme', [ProfileController::class, 'getReadme']);
+    Route::get('/profile/{user_id}/readme', [ProfileController::class, 'getReadmeById']);
+
 });
 
 Route::middleware('auth:sanctum')->group(function () {
