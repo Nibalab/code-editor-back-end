@@ -13,14 +13,27 @@ use Symfony\Component\HttpFoundation\Response;
 class AuthController extends Controller
 {
     public function register(Request $request)
-    {
-        return User::create([
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'password' => Hash::make($request->input('password')),
-            'is_admin' => $request->input('is_admin', 0)
+{
+    try {
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',
         ]);
+
+        $user = User::create([
+            'name' => $validatedData['name'],
+            'email' => $validatedData['email'],
+            'password' => Hash::make($validatedData['password']),
+            'is_admin' => $request->input('is_admin', 0),
+        ]);
+
+        return response()->json($user, 201);
+    } catch (\Exception $e) {
+        \Log::error('Registration Error: ' . $e->getMessage());
+        return response()->json(['error' => 'Registration failed'], 500);
     }
+}
 
     public function login(Request $request)
     {
@@ -41,10 +54,17 @@ class AuthController extends Controller
         ])->withCookie($cookie);
     }
 
-    public function user()
-    {
-        return Auth::user();
+   public function user(Request $request)
+{
+    $user = $request->user();
+
+    if (!$user) {
+        return response()->json(['message' => 'Unauthorized'], 401);
     }
+
+    return response()->json($user);
+}
+
 
     public function logout()
     {
